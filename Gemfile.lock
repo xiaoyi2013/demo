@@ -51,6 +51,13 @@ GEM
     execjs (1.4.0)
       multi_json (~> 1.0)
     ffi (1.7.0)
+    haml (3.2.0.alpha.14)
+      tilt
+    haml-rails (0.3.4)
+      actionpack (~> 3.0)
+      activesupport (~> 3.0)
+      haml (~> 3.0)
+      railties (~> 3.0)
     hike (1.2.2)
     i18n (0.6.1)
     journey (1.0.4)
@@ -140,6 +147,7 @@ PLATFORMS
 DEPENDENCIES
   capybara
   coffee-rails (~> 3.2.1)
+  haml-rails
   jquery-rails
   pg
   rails (= 3.2.13)
