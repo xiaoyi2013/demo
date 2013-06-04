@@ -1,7 +1,12 @@
 - provide(:title, "home")
-%h1 Demo
-%p
-  This is the home page the
-  %a(href="#") demo
-  app  
+.center.hero-unit
+  %h1 Demo
+  %h2
+    This is the home page the
+    %a(href="#") demo
+    app
+  = link_to 'Sign up now!'  , signup_path, class: 'btn btn-large btn-primary'
+
+= link_to image_tag('rails.png', alt: 'Rails'), '#'
+    
     
