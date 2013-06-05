@@ -8,6 +8,7 @@ gem 'rails', '3.2.13'
 gem 'haml-rails'
 gem 'bootstrap-sass'
 gem 'bcrypt-ruby'
+gem 'factory_girl_rails'
 group :development, :test do
   gem 'sqlite3'
   gem 'rspec-rails'
