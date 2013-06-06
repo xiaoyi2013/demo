@@ -7,7 +7,8 @@ class SessionsController < ApplicationController
       # redirect_to user, notice: " login in success"
       sign_in user
       flash[:success] = "#{user.name} has login in"
-      redirect_to user
+      # redirect_to user
+      redirect_to_location(user)
     else
       flash.now[:error] = "Invalid email/password combination"
       render 'new'

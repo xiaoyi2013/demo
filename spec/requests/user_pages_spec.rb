@@ -2,7 +2,8 @@ require 'spec_helper'
 
 describe "UserPages" do
   subject { page }
-  let(:user) { FactoryGirl.create(:user) }  
+  let(:user) { FactoryGirl.create(:user) }
+  
   describe "signup page" do
     before { visit signup_path }
     it { should have_selector('h1', text: 'sign up') }
@@ -23,9 +24,64 @@ describe "UserPages" do
 
   describe "profile page" do
 
-    before { visit user_path(user) }
+    before do
+      sign_in user
+      visit user_path(user)
+    end
     it { should have_selector('h1', text: user.name) }
     it { should have_selector('title', text: user.name) }
+  end
+
+  describe "edit page" do
+    before do
+      sign_in user
+      visit edit_user_path(user)
+    end
+    it { should have_selector('title', text: 'Edit user') }
+    it { should have_selector('h1', text: 'Update your profile') }
+    it { should have_link('change', text: 'http://gravatar.com/emails') }
+    let(:save) { "Save changes" }
+    it "with invalid information" do
+      click_button save
+      page.should have_selector('title', text: 'Edit user')
+    end
+    describe "with valid information" do
+      let(:new_name) { "New name" }
+      let(:new_email) { "new@example.com" }
+      before do
+        fill_in "Name", with: new_name
+        fill_in "Email", with: new_email
+        fill_in "Password", with: user.password
+        fill_in "Confirm Password", with: user.password
+        click_button save
+      end
+      it {  should have_selector('h1', text_name: new_name)}
+      it { user.reload.name.should == new_name }
+      it { user.reload.email == new_email }
+    end
+  end
+
+  describe "index page" do
+    
+    it "should log-in" do
+      visit users_path
+      page.should have_selector('title', text: 'Sign in')
+    end
+    describe "show all users list" do
+      before do
+        sign_in user
+        FactoryGirl.create(:user, name: "another", email: "another@example.com")
+        FactoryGirl.create(:user, name: "haha", email: "haha@example.com")
+        visit users_path
+      end
+      it {  should have_selector('title', text: 'All users') }
+      it {  should have_selector('h1', text: 'All users') }
+      it "should show all users" do
+        User.all.each do |u|
+          page.should have_selector('li', text: u.name)
+        end
+      end
+    end
   end
 end
 

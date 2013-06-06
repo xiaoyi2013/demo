@@ -19,19 +19,42 @@ describe "AuthenticationPages" do
     end
     describe "with valid information" do
       let (:user) { FactoryGirl.create(:user) }
-      before do
-        fill_in "Email", with: user.email
-        fill_in "Password", with: user.password
-        click_button('Sign in')
-      end
+      before { sign_in user }
       it { should  have_selector('title', text: user.name)}
       it { should have_link('Profile', href: user_path(user)) }
       it { should have_link('Sign out', href: signout_path) }
-      it "when click the sign out" do
-        click_link('Sign out')
-        page.should have_link('Sign in', href: signin_path)
+      it { should have_link('Settings', href: edit_user_path(user)) }
+      it { should_not have_link('Sign in', href: signin_path)}
+    end
+  end
+  describe "authentication" do
+    let(:user) { FactoryGirl.create(:user) }    
+    describe "for non-signin" do
+      it "edit action" do
+        visit edit_user_path(user)
+        page.should have_selector('title', text: 'Sign in')
       end
-
+      it "update action" do
+        put user_path(user)
+        response.should redirect_to signin_path
+      end
+      it "should go the page before he sign-in when he sign-in" do
+        visit edit_user_path(user)
+        sign_in user
+        page.should have_selector('title', text: 'Edit user')
+      end
+    end
+    describe "for signin user" do
+      before { sign_in user }
+      let(:wrong_user) { FactoryGirl.create(:user, email: "wrong@gmail.com") }
+      it "can not edit other profile" do
+        visit edit_user_path(wrong_user)
+        page.should_not have_selector('title', text: 'Edit user')
+      end
+      it "can not put other profile" do
+        put user_path(wrong_user)
+        response.should redirect_to signin_path
+      end
     end
   end
 end
