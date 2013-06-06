@@ -13,10 +13,11 @@ describe "UserPages" do
     end
     it "with valid information" do
       fill_in "Name", with: user.name
-      fill_in "Email", with: user.email
+      fill_in "Email", with: "example22@gmail.com"
       fill_in "Password", with: user.password
       fill_in "Confirmation", with: user.password_confirmation
       expect { click_button submit }.to change(User, :count).by(1)
+      page.should have_link('Sign out', href: signout_path)
     end
   end
 

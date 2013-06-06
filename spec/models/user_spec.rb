@@ -9,6 +9,7 @@ describe User do
   it { should respond_to(:password) }
   it { should respond_to(:password_confirmation) }
   it { should respond_to(:authenticate) }
+  it { should respond_to(:remember_token) }
   it { should be_valid }
 
   describe "name validation " do
@@ -70,5 +71,10 @@ describe User do
       it { should_not = user_with_invalid_password }
       it { user_with_invalid_password.should be_false }
     end
+  end
+
+  describe "remember_token validation" do
+    before {@user.save  }
+    it(:remember_token) { should_not be_blank  }
   end
 end

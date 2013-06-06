@@ -6,8 +6,10 @@ Demo::Application.routes.draw do
   match '/about', to: "static_pages#about"
   match "contact" => "static_pages#contact"
   match '/signup' => 'users#new'
-
+  match '/signin' => 'sessions#new'
+  match '/signout' => 'sessions#destroy', via: :delete
   resources :users
+  resources :sessions, only: [:new, :create, :destroy]
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
