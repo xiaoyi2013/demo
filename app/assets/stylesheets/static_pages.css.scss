@@ -163,5 +163,32 @@ input, textarea, select, .uneditable-input {
     @extend .control-group;
     @extend .error;
 }    
-    
-    
+
+/* users index */
+/* .users { */
+/*     list-style: none; */
+/*     margin: 0; */
+/*     li { */
+/*         overflow: auto; */
+/*         padding: 10px 0; */
+/*         border-top: 1px solid $grayLighter; */
+/*         &:last-child { */
+/*             border-bottom: 1px solid $grayLighter; */
+/*         } */
+
+/*     } */
+/* } */
+.users {
+    list-style: none;
+    li {
+        .gravatar {
+            float: none;
+        }
+        img {
+            vertical-align: top;
+        }
+        vertical-align: top;
+        border-top: 1px solid $grayLighter;
+        padding: 10px 0;
+    }
+}

@@ -1,8 +1,6 @@
 - provide(:title, 'All users')
-.row
-  .span6.offset3
-    %h1 All users
-    %ul.users
-      - @users.each do |user|
-        %li= gravatar_for user
-        %li= link_to user.name, user
+%h1 All users
+= will_paginate
+%ul.users
+  = render @users
+= will_paginate

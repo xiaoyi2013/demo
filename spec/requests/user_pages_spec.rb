@@ -81,6 +81,17 @@ describe "UserPages" do
           page.should have_selector('li', text: u.name)
         end
       end
+      describe "paginatation" do
+        before(:all) { 40.times {  FactoryGirl.create(:user)} }
+        after(:all){ User.delete_all }
+        before { visit users_path }
+        it { should have_selector('div.pagination') }
+        it "should list each all uers" do
+          User.paginate(page: 1) do |user|
+            page.should have_selector('li', text: user.name)
+          end
+        end
+      end
     end
   end
 end

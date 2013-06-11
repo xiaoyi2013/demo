@@ -10,7 +10,9 @@ describe User do
   it { should respond_to(:password_confirmation) }
   it { should respond_to(:authenticate) }
   it { should respond_to(:remember_token) }
+  it { should respond_to(:admin) }  
   it { should be_valid }
+  it { should_not be_admin }
 
   describe "name validation " do
     it "should not be blank in name" do
@@ -62,6 +64,10 @@ describe User do
     end
   end
 
+  describe "admin validation" do
+    before { @user.toggle!(:admin) }
+    it { should be_admin }
+  end
   describe "authticate" do
     before { @user.save }
     let(:find_user) { User.find_by_email(@user.email) }
