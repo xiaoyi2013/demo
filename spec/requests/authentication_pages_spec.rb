@@ -44,6 +44,17 @@ describe "AuthenticationPages" do
         sign_in user
         page.should have_selector('title', text: 'Edit user')
       end
+      describe "micropost" do
+        let(:micropost) {FactoryGirl.create(:micropost, user: user, content: "not login")}
+        it "access create action" do
+          post microposts_path
+          response.should redirect_to signin_path
+        end
+        it "access destroy action" do
+          delete micropost_path(micropost)
+          response.should redirect_to signin_path
+        end
+      end
     end
     describe "for signin user" do
       before { sign_in user }

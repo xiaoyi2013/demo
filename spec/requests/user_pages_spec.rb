@@ -23,6 +23,8 @@ describe "UserPages" do
   end
 
   describe "profile page" do
+    let!(:m1) { FactoryGirl.create(:micropost, user: user, content: "micropost1") }
+    let!(:m2) { FactoryGirl.create(:micropost, user: user, content: "micropost2") }
 
     before do
       sign_in user
@@ -30,6 +32,11 @@ describe "UserPages" do
     end
     it { should have_selector('h1', text: user.name) }
     it { should have_selector('title', text: user.name) }
+    describe "microposts" do
+      it { should have_content(m1.content) }
+      it { should have_content(m2.content) }
+      it { should have_content(user.microposts.count) }
+    end
   end
 
   describe "edit page" do
@@ -94,6 +101,7 @@ describe "UserPages" do
       end
     end
   end
+
 end
 
 

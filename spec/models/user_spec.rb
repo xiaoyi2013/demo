@@ -10,7 +10,9 @@ describe User do
   it { should respond_to(:password_confirmation) }
   it { should respond_to(:authenticate) }
   it { should respond_to(:remember_token) }
-  it { should respond_to(:admin) }  
+  it { should respond_to(:admin) }
+  it { should respond_to(:microposts) }
+  it { should respond_to(:feed) }
   it { should be_valid }
   it { should_not be_admin }
 
@@ -83,4 +85,16 @@ describe User do
     before {@user.save  }
     it(:remember_token) { should_not be_blank  }
   end
+
+    describe "should show microposts on the home page of user" do
+      before do
+        @user.save
+      end
+      let!(:older_micropost) {  FactoryGirl.create(:micropost, user: @user, created_at: 1.day.ago)}
+      let!(:newer_micropost) {FactoryGirl.create(:micropost, user: @user, created_at: 1.hour.ago)}
+      let!(:unfollowed_post) { FactoryGirl.create(:micropost, user: FactoryGirl.create(:user)) }
+      its(:feed) {  should include(older_micropost) }
+      its(:feed) {  should include(newer_micropost) }
+      its(:feed) {  should_not include(unfollowed_post) }
+    end
 end

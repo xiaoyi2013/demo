@@ -25,6 +25,22 @@ describe "StaticPages" do
       click_link 'Sign up now!'
       page.should have_selector('title', text: full_title('sign up'))
     end
+    describe "for signed-in user" do
+      let(:user) { FactoryGirl.create(:user) }
+      before do
+        FactoryGirl.create(:micropost, user: user, content: "first")
+        FactoryGirl.create(:micropost, user: user, content: "second")
+        sign_in user
+        visit root_path
+      end
+      it { should have_content('Micropost Feed') }
+      it "show users' microposts" do
+        user.feed.each do |m|
+          page.should have_selector("li##{m.id}", text: m.content)
+        end
+      end
+      
+    end
   end
 
   describe "Help page" do

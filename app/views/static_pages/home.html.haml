@@ -1,12 +1,23 @@
 - provide(:title, "home")
-.center.hero-unit
-  %h1 Demo
-  %h2
-    This is the home page the
-    %a(href="#") demo
-    app
-  = link_to 'Sign up now!'  , signup_path, class: 'btn btn-large btn-primary'
+- if sign_in?
+  .row
+    %aside.span4
+      %section
+        = render 'shared/user_info'
+      %section
+        = render 'shared/micropost_form'
+    .span8
+      %h3 Micropost Feed
+      = render 'shared/micropost_feed'
+- else  
+  .center.hero-unit
+    %h1 Demo
+    %h2
+      This is the home page the
+      %a(href="#") demo
+      app
+    = link_to 'Sign up now!'  , signup_path, class: 'btn btn-large btn-primary'
 
-= link_to image_tag('rails.png', alt: 'Rails'), '#'
+  = link_to image_tag('rails.png', alt: 'Rails'), '#'
     
     
