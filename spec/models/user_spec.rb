@@ -93,17 +93,26 @@ describe User do
     it(:remember_token) { should_not be_blank  }
   end
 
-    describe "should show microposts on the home page of user" do
-      before do
-        @user.save
-      end
-      let!(:older_micropost) {  FactoryGirl.create(:micropost, user: @user, created_at: 1.day.ago)}
-      let!(:newer_micropost) {FactoryGirl.create(:micropost, user: @user, created_at: 1.hour.ago)}
-      let!(:unfollowed_post) { FactoryGirl.create(:micropost, user: FactoryGirl.create(:user)) }
-      its(:feed) {  should include(older_micropost) }
-      its(:feed) {  should include(newer_micropost) }
-      its(:feed) {  should_not include(unfollowed_post) }
+  describe "should show microposts on the home page of user" do
+    let(:other_user){ FactoryGirl.create(:user) }
+    before do
+      @user.save
+      @user.follow!(other_user)
+      3.times { other_user.microposts.create!(content: "lorem ipsum") }
     end
+    let!(:older_micropost) {  FactoryGirl.create(:micropost, user: @user, created_at: 1.day.ago)}
+    let!(:newer_micropost) {FactoryGirl.create(:micropost, user: @user, created_at: 1.hour.ago)}
+    let!(:unfollowed_post) { FactoryGirl.create(:micropost, user: FactoryGirl.create(:user)) }
+
+    its(:feed) {  should include(older_micropost) }
+    its(:feed) {  should include(newer_micropost) }
+    its(:feed) {  should_not include(unfollowed_post) }
+    its(:feed) do
+      other_user.microposts.each do |mic|
+        should include(mic)
+      end
+    end
+  end
   describe "follow user" do
     let(:other_user) {FactoryGirl.create(:user)}
     before do

@@ -15,7 +15,8 @@ class User < ActiveRecord::Base
   before_save { |user| user.email = email.downcase }
   before_save :generate_remember_token
   def feed
-    Micropost.where("user_id = ?", id)
+    # Micropost.where("user_id = ?", id)
+    Micropost.from_users_followed_by(self)
   end
   def follow!(user)
     self.relationships.create(followed_id: user.id)

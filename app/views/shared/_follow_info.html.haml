@@ -1,0 +1,10 @@
+- @user ||= current_user
+.follow_info
+  %a(href="#{following_user_path(current_user)}")
+    %strong#following.follow_info
+      = @user.followed_users.count
+    following
+  %a(href="#{followers_user_path(current_user)}")
+    %strong#followers.follow_info
+      = @user.followers.count
+    followers

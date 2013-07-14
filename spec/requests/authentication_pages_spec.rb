@@ -39,10 +39,28 @@ describe "AuthenticationPages" do
         put user_path(user)
         response.should redirect_to signin_path
       end
+      it "visit /:id/followers" do
+        visit followers_user_path(user)
+        page.should have_selector('title', text: 'Sign in')
+      end
+      it "visit /:id/following" do
+        visit following_user_path(user)
+        page.should have_selector('title', text: 'Sign in')
+      end
       it "should go the page before he sign-in when he sign-in" do
         visit edit_user_path(user)
         sign_in user
         page.should have_selector('title', text: 'Edit user')
+      end
+      describe " in the Relationships controller" do
+        it "access the create action" do
+          post relationships_path
+          response.should redirect_to signin_path
+        end
+        it "access the destroy action" do
+          delete relationship_path(1)
+          response.should redirect_to signin_path
+        end
       end
       describe "micropost" do
         let(:micropost) {FactoryGirl.create(:micropost, user: user, content: "not login")}
@@ -67,6 +85,7 @@ describe "AuthenticationPages" do
         put user_path(wrong_user)
         response.should redirect_to signin_path
       end
+
       describe "for non-admin user" do
         before { visit users_path }
         it { should_not have_link('delete')  }
